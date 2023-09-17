@@ -1,5 +1,6 @@
 package com.rodrigonovoa.rickandmortycharacters.ui
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyClient
 import com.rodrigonovoa.rickandmortycharacters.data.api.CharacterResponse
@@ -9,11 +10,14 @@ import retrofit2.Response
 
 class MainActivityViewModel: ViewModel() {
 
+    val characters: MutableLiveData<CharacterResponse> = MutableLiveData()
+
     fun getCharactersFromApi() {
         RickAndMortyClient.instance.getCharacters().enqueue(object : Callback<CharacterResponse> {
             override fun onResponse(call: Call<CharacterResponse>, response: Response<CharacterResponse>) {
                 if (response.isSuccessful) {
                     val character = response.body()
+                    characters.postValue(character)
                     // Handle the successful response here
                 } else {
                     // Handle the error response, e.g., show an error message
