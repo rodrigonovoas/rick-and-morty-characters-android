@@ -2,32 +2,22 @@ package com.rodrigonovoa.rickandmortycharacters.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyClient
-import com.rodrigonovoa.rickandmortycharacters.data.api.CharacterResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.viewModelScope
+import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyRepositoryImpl
+import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainActivityViewModel: ViewModel() {
+class MainActivityViewModel(repository: RickAndMortyRepositoryImpl): ViewModel() {
 
-    val characters: MutableLiveData<CharacterResponse> = MutableLiveData()
+    var characters: MutableLiveData<List<CharacterRow>> = MutableLiveData()
 
-    fun getCharactersFromApi() {
-        RickAndMortyClient.instance.getCharacters().enqueue(object : Callback<CharacterResponse> {
-            override fun onResponse(call: Call<CharacterResponse>, response: Response<CharacterResponse>) {
-                if (response.isSuccessful) {
-                    val character = response.body()
-                    characters.postValue(character)
-                    // Handle the successful response here
-                } else {
-                    // Handle the error response, e.g., show an error message
-                }
-            }
+    init {
+        this.characters = repository.characters
 
-            override fun onFailure(call: Call<CharacterResponse>, t: Throwable) {
-                // Handle the failure, e.g., show an error message or retry the request
-            }
-        })
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getCharacters()
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.rodrigonovoa.rickandmortycharacters.data.api
 
-data class Character(
+data class Result(
     val id: Int,
     val name: String,
     val status: String,
