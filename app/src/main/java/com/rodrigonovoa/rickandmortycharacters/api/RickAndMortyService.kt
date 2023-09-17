@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface RickAndMortyService {
-    @GET("https://rickandmortyapi.com/api/character")
+    @GET("character")
     fun getCharacters(): Call<CharacterResponse>
 }
