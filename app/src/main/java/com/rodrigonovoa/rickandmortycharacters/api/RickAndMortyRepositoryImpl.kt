@@ -10,8 +10,8 @@ class RickAndMortyRepositoryImpl(
 
     var characters = MutableLiveData<List<CharacterRow>>()
 
-    override fun getCharacters() {
-        val characterRowList = mapToCharacterRow(service.getCharacters().execute().body()?.results ?: listOf())
+    override fun getCharacters(page: Int) {
+        val characterRowList = mapToCharacterRow(service.getCharacters(page).execute().body()?.results ?: listOf())
         characters.postValue(characterRowList)
     }
 

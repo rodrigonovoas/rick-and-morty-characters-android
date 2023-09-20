@@ -1,5 +1,5 @@
 package com.rodrigonovoa.rickandmortycharacters.api
 
 interface RickAndMortyRepository {
-    fun getCharacters()
+    fun getCharacters(page: Int)
 }
