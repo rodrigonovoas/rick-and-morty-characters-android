@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.rodrigonovoa.rickandmortycharacters.R
 import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
 
-class CharactersRecyclerviewAdapter(private val serieCharacters: List<CharacterRow>) : RecyclerView.Adapter<CharactersRecyclerviewAdapter.CharactersViewHolder>() {
+class CharactersRecyclerviewAdapter(private var serieCharacters: List<CharacterRow>) : RecyclerView.Adapter<CharactersRecyclerviewAdapter.CharactersViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.character_row, parent, false)
         return CharactersViewHolder(view)
@@ -28,5 +28,10 @@ class CharactersRecyclerviewAdapter(private val serieCharacters: List<CharacterR
     class CharactersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tv_character_name)
         val ivPic: ImageView = itemView.findViewById(R.id.iv_character_pic)
+    }
+
+    fun setDataSet(newCharacters: List<CharacterRow>) {
+        this.serieCharacters = newCharacters
+        notifyDataSetChanged()
     }
 }

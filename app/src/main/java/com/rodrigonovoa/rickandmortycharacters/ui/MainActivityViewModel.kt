@@ -8,7 +8,7 @@ import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(val repository: RickAndMortyRepositoryImpl): ViewModel() {
+class MainActivityViewModel(private val repository: RickAndMortyRepositoryImpl): ViewModel() {
 
     var characters: MutableLiveData<List<CharacterRow>> = MutableLiveData()
 
@@ -23,4 +23,9 @@ class MainActivityViewModel(val repository: RickAndMortyRepositoryImpl): ViewMod
         }
     }
 
+    fun getCharactersByName(page: Int, name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getCharactersByName(page, name)
+        }
+    }
 }

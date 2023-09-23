@@ -17,6 +17,17 @@ class RickAndMortyRepositoryImpl(
         characters.postValue(currentCharacterList)
     }
 
+    override fun getCharactersByName(page: Int, name: String) {
+        var currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
+        val characterRowList = mapToCharacterRow(service.getCharactersByName(page, name).execute().body()?.results ?: listOf())
+        currentCharacterList?.addAll(characterRowList)
+        if (page == 1) {
+            characters.postValue(characterRowList)
+        } else {
+            characters.postValue(currentCharacterList)
+        }
+    }
+
     private fun mapToCharacterRow(characters: List<Result>): List<CharacterRow> {
         return characters.map { CharacterRow(it.name, it.image) }
     }
