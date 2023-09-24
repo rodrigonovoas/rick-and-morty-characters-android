@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeRecyclerView(characters: List<CharacterRow>) {
         with(binding.rcCharacters) {
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = GridLayoutManager(this@MainActivity, 4)
             adapter = CharactersRecyclerviewAdapter(characters)
         }
     }

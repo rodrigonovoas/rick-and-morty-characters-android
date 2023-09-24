@@ -61,4 +61,7 @@ dependencies {
 
     // Koin - DI
     implementation 'io.insert-koin:koin-android:3.4.0'
+
+    // circled imageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
