@@ -20,4 +20,8 @@ class DetailViewModel(private val repository: RickAndMortyRepositoryImpl): ViewM
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+    }
+
 }

@@ -35,7 +35,7 @@ class RickAndMortyRepositoryImpl(
     }
 
     private fun mapToCharacterRow(characters: List<Result>): List<CharacterRow> {
-        return characters.map { CharacterRow(it.name, it.image) }
+        return characters.map { CharacterRow(it.id, it.name, it.image) }
     }
 
 }

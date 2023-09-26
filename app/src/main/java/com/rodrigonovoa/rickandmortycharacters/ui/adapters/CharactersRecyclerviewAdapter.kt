@@ -22,7 +22,7 @@ class CharactersRecyclerviewAdapter(private var serieCharacters: List<CharacterR
     }
 
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {
-        holder.llCharacter.setOnClickListener {  listener.onItemClicked(13) }
+        holder.llCharacter.setOnClickListener {  listener.onItemClicked(serieCharacters[position].id) }
         holder.tvName.text = serieCharacters[position].name
         Glide.with(holder.ivPic.context).load(serieCharacters[position].imageUrl).into(holder.ivPic);
     }

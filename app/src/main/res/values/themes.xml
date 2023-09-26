@@ -12,5 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">#e3d5ca</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/faustina</item>
     </style>
 </resources>
