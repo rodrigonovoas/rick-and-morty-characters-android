@@ -10,13 +10,17 @@
         android:label="Characteres Fragment"
         tools:layout="@layout/fragment_characters">
         <action
-            android:id="@+id/action_firstFragment_to_secondFragment"
-            app:destination="@id/secondFragment" />
+            android:id="@+id/action_nav_to_detail_fragment"
+            app:destination="@id/detailFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/secondFragment"
+        android:id="@+id/detailFragment"
         android:name="com.rodrigonovoa.rickandmortycharacters.ui.detailFragment.DetailFragment"
         android:label="Detail Fragment"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="characterIdBundle"
+            app:argType="integer" />
+    </fragment>
 </navigation>

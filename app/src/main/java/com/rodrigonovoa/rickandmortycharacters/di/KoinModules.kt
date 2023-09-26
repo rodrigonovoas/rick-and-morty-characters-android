@@ -5,6 +5,7 @@ import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyClient
 import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyRepositoryImpl
 import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyService
 import com.rodrigonovoa.rickandmortycharacters.ui.charactersFragment.CharactersViewModel
+import com.rodrigonovoa.rickandmortycharacters.ui.detailFragment.DetailViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -16,4 +17,5 @@ val appModule = module {
 
     // ViewModel
     viewModel { CharactersViewModel(get()) }
+    viewModel { DetailViewModel(get()) }
 }
