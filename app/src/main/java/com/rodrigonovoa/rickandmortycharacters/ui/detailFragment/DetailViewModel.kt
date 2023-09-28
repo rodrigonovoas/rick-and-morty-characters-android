@@ -8,20 +8,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val repository: RickAndMortyRepositoryImpl): ViewModel() {
-    var detail: MutableLiveData<com.rodrigonovoa.rickandmortycharacters.data.api.Result> = MutableLiveData()
-
-    init {
-        this.detail = repository.detail
-    }
+    var detail: MutableLiveData<com.rodrigonovoa.rickandmortycharacters.data.api.ResultResponse> = MutableLiveData()
 
     fun getCharacterById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getCharacterById(id)
-        }
-    }
+            repository.getCharacterById(id).collect {
+                if(it.isSuccess) {
+                    val character = it.getOrNull()
+                    this@DetailViewModel.detail.postValue(character)
+                } else {
 
-    override fun onCleared() {
-        super.onCleared()
+                }
+            }
+
+        }
     }
 
 }

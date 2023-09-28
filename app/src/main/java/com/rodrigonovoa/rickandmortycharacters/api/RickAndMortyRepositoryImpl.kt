@@ -1,41 +1,56 @@
 package com.rodrigonovoa.rickandmortycharacters.api
 
-import androidx.lifecycle.MutableLiveData
-import com.rodrigonovoa.rickandmortycharacters.data.api.Result
-import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
+import com.rodrigonovoa.rickandmortycharacters.data.api.CharacterResponse
+import com.rodrigonovoa.rickandmortycharacters.data.api.ResultResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class RickAndMortyRepositoryImpl(
     private val service: RickAndMortyService
 ) : RickAndMortyRepository {
 
-    var characters = MutableLiveData<List<CharacterRow>>()
-    var detail: MutableLiveData<com.rodrigonovoa.rickandmortycharacters.data.api.Result> = MutableLiveData()
-
-    override fun getCharacters(page: Int) {
-        var currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
-        val characterRowList = mapToCharacterRow(service.getCharacters(page).execute().body()?.results ?: listOf())
-        currentCharacterList?.addAll(characterRowList)
-        characters.postValue(currentCharacterList)
-    }
-
-    override fun getCharactersByName(page: Int, name: String) {
-        var currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
-        val characterRowList = mapToCharacterRow(service.getCharactersByName(page, name).execute().body()?.results ?: listOf())
-        currentCharacterList?.addAll(characterRowList)
-        if (page == 1) {
-            characters.postValue(characterRowList)
-        } else {
-            characters.postValue(currentCharacterList)
+    override fun getCharacters(page: Int): Flow<Result<CharacterResponse>> = flow {
+        try {
+            val response = service.getCharacters(page)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(Result.success(it))
+                }
+            } else {
+                emit(Result.failure(Throwable(response.message())))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
         }
     }
 
-    override fun getCharacterById(characterId: Int) {
-        val character = service.getCharacterById(characterId).execute().body()!!
-        detail.postValue(character)
+    override fun getCharactersByName(page: Int, name: String): Flow<Result<CharacterResponse>> = flow {
+        try {
+            val response = service.getCharactersByName(page, name)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(Result.success(it))
+                }
+            } else {
+                emit(Result.failure(Throwable(response.message())))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
     }
 
-    private fun mapToCharacterRow(characters: List<Result>): List<CharacterRow> {
-        return characters.map { CharacterRow(it.id, it.name, it.image) }
+    override fun getCharacterById(characterId: Int): Flow<Result<ResultResponse>> = flow {
+        try {
+            val response = service.getCharacterById(characterId)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(Result.success(it))
+                }
+            } else {
+                emit(Result.failure(Throwable(response.message())))
+            }
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
     }
-
 }

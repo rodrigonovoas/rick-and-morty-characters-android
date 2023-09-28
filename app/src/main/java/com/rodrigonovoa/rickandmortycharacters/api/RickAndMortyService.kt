@@ -1,18 +1,19 @@
 package com.rodrigonovoa.rickandmortycharacters.api
 
 import com.rodrigonovoa.rickandmortycharacters.data.api.CharacterResponse
-import retrofit2.Call
+import com.rodrigonovoa.rickandmortycharacters.data.api.ResultResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RickAndMortyService {
     @GET("character/?")
-    fun getCharacters(@Query("page") currentPage: Int): Call<CharacterResponse>
+    suspend fun getCharacters(@Query("page") currentPage: Int): Response<CharacterResponse>
 
     @GET("character/?")
-    fun getCharactersByName(@Query("page") currentPage: Int, @Query("name") characterName: String): Call<CharacterResponse>
+    suspend fun getCharactersByName(@Query("page") currentPage: Int, @Query("name") characterName: String): Response<CharacterResponse>
 
     @GET("character/{id}")
-    fun getCharacterById(@Path("id") currentPage: Int): Call<com.rodrigonovoa.rickandmortycharacters.data.api.Result>
+    suspend fun getCharacterById(@Path("id") currentPage: Int): Response<ResultResponse>
 }

@@ -53,8 +53,4 @@ class DetailFragment : Fragment() {
             if(isAdded) Glide.with(requireContext()).load(detail.image).into(binding.imvCharacter);
         })
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
