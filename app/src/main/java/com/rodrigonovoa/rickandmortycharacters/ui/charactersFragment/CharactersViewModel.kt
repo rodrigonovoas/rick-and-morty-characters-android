@@ -69,6 +69,7 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
         val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
 
         if (page == 1) {
+            // if it is the first page, the characters are not added to the previous ones in the recyclerview
             _characters.postValue(mappedCharacters)
         } else {
             val currentCharacterList = _characters.value?.toMutableList() ?: mutableListOf()
@@ -77,6 +78,7 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
         }
     }
 
+    // clear data to load more pages from the start
     fun clearPagesData() {
         currentPage = 0
         lastPage = 1

@@ -53,8 +53,10 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
                 val enteredText = binding.edtSearch.text.toString()
                 enteredName = enteredText
                 if (enteredText.isNotEmpty()) {
+                    // if not empty, searches the entered character
                     mainViewModel.getCharactersByName(1, enteredText)
                 } else {
+                    // if empty, searches the general list of characters
                     mainViewModel.loadMoreCharacters(1)
                 }
                 true
@@ -73,6 +75,7 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
                 if (adapter == null) {
                     initializeRecyclerView(characters)
                 } else {
+                    // updated the data retrieved from API
                     (adapter as? CharactersRecyclerviewAdapter)?.setDataSet(characters)
                 }
             }
@@ -86,6 +89,8 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
 
         mainViewModel.noCharacteresFound.observe(requireActivity(), Observer { value ->
             if(value) {
+                // if the introduced data is not found, the recyclerview is emptied
+                // and the informative label is visible
                 (binding.rcCharacters.adapter as? CharactersRecyclerviewAdapter)?.setDataSet(listOf())
                 binding.tvCharacterNotFound.visibility = View.VISIBLE
             }
@@ -121,6 +126,7 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
     private fun loadNextPageAfterReachingEnd() {
         characterListLoading = true
 
+        // differences between loading more characteres from the normal feed or after searching one
         if(!enteredName.isNullOrEmpty()) {
             mainViewModel.getCharactersByName(mainViewModel.currentPage, enteredName)
         } else {
