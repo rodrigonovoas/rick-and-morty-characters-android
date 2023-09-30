@@ -1,5 +1,6 @@
 package com.rodrigonovoa.rickandmortycharacters.ui.charactersFragment
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,14 @@ import kotlinx.coroutines.launch
 
 class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): ViewModel() {
 
-    var characters: MutableLiveData<List<CharacterRow>> = MutableLiveData()
+    private val _characters: MutableLiveData<List<CharacterRow>> = MutableLiveData()
+    val characters: LiveData<List<CharacterRow>> get() = _characters
+
+    private val _errorLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val errorLoading: LiveData<Boolean> get() = _errorLoading
+
+    private var lastPage = 1
+    var currentPage = 0
 
     init {
         loadMoreCharacters(1)
@@ -25,9 +33,9 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
                     val charactersFromApi = it.getOrNull()
                     val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
                     currentCharacterList?.addAll(mappedCharacters)
-                    characters.postValue(currentCharacterList)
+                    _characters.postValue(currentCharacterList)
                 } else {
-
+                    _errorLoading.postValue(true)
                 }
             }
         }
@@ -39,22 +47,29 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
 
     fun getCharactersByName(page: Int, name: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (page > lastPage) { return@launch }
             repository.getCharactersByName(page, name).collect {
                 if(it.isSuccess) {
                     val charactersFromApi = it.getOrNull()
+                    lastPage = charactersFromApi?.info?.pages ?: 1
                     val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
 
                     if (page == 1) {
-                        characters.postValue(mappedCharacters)
+                        _characters.postValue(mappedCharacters)
                     } else {
                         val currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
                         currentCharacterList.addAll(mappedCharacters)
-                        characters.postValue(currentCharacterList)
+                        _characters.postValue(currentCharacterList)
                     }
                 } else {
-
+                    _errorLoading.postValue(true)
                 }
             }
         }
+    }
+
+    fun clearPagesData() {
+        currentPage = 0
+        lastPage = 1
     }
 }

@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_firstFragment_to_secondFragment">
+                            <entry key="action_nav_to_detail_fragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -29,12 +29,12 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="secondFragment">
+                  <entry key="detailFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="256" />
+                            <option name="x" value="12" />
                             <option name="y" value="12" />
                           </Point>
                         </option>

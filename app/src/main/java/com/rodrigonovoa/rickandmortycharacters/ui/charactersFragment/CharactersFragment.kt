@@ -1,8 +1,7 @@
 package com.rodrigonovoa.rickandmortycharacters.ui.charactersFragment
 
+import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rodrigonovoa.rickandmortycharacters.R
 import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
 import com.rodrigonovoa.rickandmortycharacters.databinding.FragmentCharactersBinding
@@ -26,7 +26,6 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
     private val binding get() = _binding!!
 
     private val mainViewModel: CharactersViewModel by viewModel()
-    private var currentPage = 0
     private var characterListLoading = false
     private var enteredName = ""
 
@@ -52,6 +51,7 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
     private fun searchBarListener() {
         binding.edtSearch.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                mainViewModel.clearPagesData()
                 val enteredText = binding.edtSearch.text.toString()
                 if (enteredText.isNotEmpty()) {
                     enteredName = enteredText
@@ -76,19 +76,31 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
                 }
             }
         })
+
+        mainViewModel.errorLoading.observe(requireActivity(), Observer { value ->
+            if(value) {
+                showErrorDialog(requireContext())
+            }
+        })
+    }
+
+    private fun showErrorDialog(context: Context) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle("Error retrieving data")
+            .setPositiveButton("OK") { dialog, which -> }
+            .show()
     }
 
     private fun initializeRecyclerView(characters: List<CharacterRow>) {
         with(binding.rcCharacters) {
-            layoutManager = GridLayoutManager(requireContext(), 4)
+            layoutManager = GridLayoutManager(requireContext(), 3)
             adapter = CharactersRecyclerviewAdapter(characters, this@CharactersFragment)
         }
     }
 
     private fun scrollListener() {
         val visibleThreshold = 5 // limit to start loading more characters
-        characterListLoading = false
-        currentPage = 1
+        mainViewModel.currentPage = 1
 
         binding.rcCharacters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -98,7 +110,7 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
                 val lastVisibleCharacter = layoutManager.findLastVisibleItemPosition() // number of the last visible char.
 
                 if (!characterListLoading && totalCharactersCount <= lastVisibleCharacter + visibleThreshold) {
-                    currentPage++
+                    mainViewModel.currentPage++
                     loadNextPageAfterReachingEnd()
                 }
             }
@@ -109,9 +121,9 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
         characterListLoading = true
 
         if(!enteredName.isNullOrEmpty()) {
-            mainViewModel.getCharactersByName(currentPage, enteredName)
+            mainViewModel.getCharactersByName(mainViewModel.currentPage, enteredName)
         } else {
-            mainViewModel.loadMoreCharacters(currentPage)
+            mainViewModel.loadMoreCharacters(mainViewModel.currentPage)
         }
     }
 

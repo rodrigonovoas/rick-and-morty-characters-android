@@ -50,7 +50,7 @@ class DetailFragment : Fragment() {
             binding.tvSpecies.text = "Specie: " + detail.species
             binding.tvOrigin.text = "Origin: " + detail.origin.name
             binding.tvGender.text = "Gender: " + detail.gender
-            if(isAdded) Glide.with(requireContext()).load(detail.image).into(binding.imvCharacter);
+            if (isAdded) Glide.with(requireContext()).load(detail.image).into(binding.imvCharacter);
         })
     }
 }
