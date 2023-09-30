@@ -19,6 +19,9 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
     private val _errorLoading: MutableLiveData<Boolean> = MutableLiveData()
     val errorLoading: LiveData<Boolean> get() = _errorLoading
 
+    private val _noCharacteresFound: MutableLiveData<Boolean> = MutableLiveData()
+    val noCharacteresFound: LiveData<Boolean> get() = _noCharacteresFound
+
     private var lastPage = 1
     var currentPage = 0
 
@@ -49,13 +52,18 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
                 if(it.isSuccess) {
                     processApiResult(it, page)
                 } else {
-                    _errorLoading.postValue(true)
+                    try {
+                        val exception = it.getOrThrow()
+                        _errorLoading.postValue(true)
+                    } catch (e: Throwable) {
+                        _noCharacteresFound.postValue(true)
+                    }
                 }
             }
         }
     }
 
-    fun processApiResult(apiResult: Result<CharacterResponse>, page: Int) {
+    private fun processApiResult(apiResult: Result<CharacterResponse>, page: Int) {
         val charactersFromApi = apiResult.getOrNull()
         lastPage = charactersFromApi?.info?.pages ?: 1
         val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())

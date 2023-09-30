@@ -67,6 +67,7 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
     private fun observers() {
         mainViewModel.characters.observe(requireActivity(), Observer { characters ->
             characterListLoading = false
+            binding.tvCharacterNotFound.visibility = View.GONE
 
             with(binding.rcCharacters) {
                 if (adapter == null) {
@@ -80,6 +81,13 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
         mainViewModel.errorLoading.observe(requireActivity(), Observer { value ->
             if(value) {
                 DialogUtils.showErrorDialog(requireContext())
+            }
+        })
+
+        mainViewModel.noCharacteresFound.observe(requireActivity(), Observer { value ->
+            if(value) {
+                (binding.rcCharacters.adapter as? CharactersRecyclerviewAdapter)?.setDataSet(listOf())
+                binding.tvCharacterNotFound.visibility = View.VISIBLE
             }
         })
     }
