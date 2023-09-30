@@ -20,7 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickListener {
-
     private var _binding: FragmentCharactersBinding? = null
     private val binding get() = _binding!!
 
@@ -52,9 +51,11 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 mainViewModel.clearPagesData()
                 val enteredText = binding.edtSearch.text.toString()
+                enteredName = enteredText
                 if (enteredText.isNotEmpty()) {
-                    enteredName = enteredText
                     mainViewModel.getCharactersByName(1, enteredText)
+                } else {
+                    mainViewModel.loadMoreCharacters(1)
                 }
                 true
             } else {

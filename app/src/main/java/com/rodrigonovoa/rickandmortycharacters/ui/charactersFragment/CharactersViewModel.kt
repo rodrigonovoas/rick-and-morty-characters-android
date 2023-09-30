@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rodrigonovoa.rickandmortycharacters.api.RickAndMortyRepositoryImpl
+import com.rodrigonovoa.rickandmortycharacters.data.api.CharacterResponse
 import com.rodrigonovoa.rickandmortycharacters.data.api.ResultResponse
 import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
 import kotlinx.coroutines.Dispatchers
@@ -29,11 +30,7 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
         viewModelScope.launch(Dispatchers.IO) {
             repository.getCharacters(page).collect {
                 if(it.isSuccess) {
-                    var currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
-                    val charactersFromApi = it.getOrNull()
-                    val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
-                    currentCharacterList?.addAll(mappedCharacters)
-                    _characters.postValue(currentCharacterList)
+                    processApiResult(it, page)
                 } else {
                     _errorLoading.postValue(true)
                 }
@@ -50,21 +47,25 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
             if (page > lastPage) { return@launch }
             repository.getCharactersByName(page, name).collect {
                 if(it.isSuccess) {
-                    val charactersFromApi = it.getOrNull()
-                    lastPage = charactersFromApi?.info?.pages ?: 1
-                    val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
-
-                    if (page == 1) {
-                        _characters.postValue(mappedCharacters)
-                    } else {
-                        val currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
-                        currentCharacterList.addAll(mappedCharacters)
-                        _characters.postValue(currentCharacterList)
-                    }
+                    processApiResult(it, page)
                 } else {
                     _errorLoading.postValue(true)
                 }
             }
+        }
+    }
+
+    fun processApiResult(apiResult: Result<CharacterResponse>, page: Int) {
+        val charactersFromApi = apiResult.getOrNull()
+        lastPage = charactersFromApi?.info?.pages ?: 1
+        val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
+
+        if (page == 1) {
+            _characters.postValue(mappedCharacters)
+        } else {
+            val currentCharacterList = _characters.value?.toMutableList() ?: mutableListOf()
+            currentCharacterList.addAll(mappedCharacters)
+            _characters.postValue(currentCharacterList)
         }
     }
 
