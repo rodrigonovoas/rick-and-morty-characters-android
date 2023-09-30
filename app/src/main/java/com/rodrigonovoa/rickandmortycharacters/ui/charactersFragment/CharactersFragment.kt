@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -49,16 +50,18 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
     }
 
     private fun searchBarListener() {
-        binding.edtSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                enteredName = s.toString()
-                mainViewModel.getCharactersByName(1, s.toString())
+        binding.edtSearch.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val enteredText = binding.edtSearch.text.toString()
+                if (enteredText.isNotEmpty()) {
+                    enteredName = enteredText
+                    mainViewModel.getCharactersByName(1, enteredText)
+                }
+                true
+            } else {
+                false
             }
-
-            override fun afterTextChanged(s: Editable) {}
-        })
+        }
     }
 
     private fun observers() {

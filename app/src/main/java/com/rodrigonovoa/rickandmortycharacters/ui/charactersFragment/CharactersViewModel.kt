@@ -39,7 +39,22 @@ class CharactersViewModel(private val repository: RickAndMortyRepositoryImpl): V
 
     fun getCharactersByName(page: Int, name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getCharactersByName(page, name)
+            repository.getCharactersByName(page, name).collect {
+                if(it.isSuccess) {
+                    val charactersFromApi = it.getOrNull()
+                    val mappedCharacters = mapToCharacterRow(charactersFromApi?.results ?: listOf())
+
+                    if (page == 1) {
+                        characters.postValue(mappedCharacters)
+                    } else {
+                        val currentCharacterList = characters.value?.toMutableList() ?: mutableListOf()
+                        currentCharacterList.addAll(mappedCharacters)
+                        characters.postValue(currentCharacterList)
+                    }
+                } else {
+
+                }
+            }
         }
     }
 }
