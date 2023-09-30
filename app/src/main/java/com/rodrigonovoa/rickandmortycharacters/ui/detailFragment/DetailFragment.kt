@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.rodrigonovoa.rickandmortycharacters.databinding.FragmentDetailBinding
+import com.rodrigonovoa.rickandmortycharacters.utils.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailFragment : Fragment() {
@@ -51,6 +52,12 @@ class DetailFragment : Fragment() {
             binding.tvOrigin.text = "Origin: " + detail.origin.name
             binding.tvGender.text = "Gender: " + detail.gender
             if (isAdded) Glide.with(requireContext()).load(detail.image).into(binding.imvCharacter);
+        })
+
+        detailViewModel.errorLoading.observe(requireActivity(), Observer { value ->
+            if(value) {
+                DialogUtils.showErrorDialog(requireContext())
+            }
         })
     }
 }

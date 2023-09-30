@@ -14,4 +14,14 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/faustina</item>
     </style>
+
+    <!-- Other styles -->
+
+    <style name="AlertDialogCustom" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog.Flush">
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

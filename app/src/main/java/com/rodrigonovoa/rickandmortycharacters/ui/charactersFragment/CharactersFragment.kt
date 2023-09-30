@@ -1,6 +1,5 @@
 package com.rodrigonovoa.rickandmortycharacters.ui.charactersFragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,11 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rodrigonovoa.rickandmortycharacters.R
 import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
 import com.rodrigonovoa.rickandmortycharacters.databinding.FragmentCharactersBinding
 import com.rodrigonovoa.rickandmortycharacters.ui.adapters.CharactersRecyclerviewAdapter
+import com.rodrigonovoa.rickandmortycharacters.utils.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -79,16 +78,9 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
 
         mainViewModel.errorLoading.observe(requireActivity(), Observer { value ->
             if(value) {
-                showErrorDialog(requireContext())
+                DialogUtils.showErrorDialog(requireContext())
             }
         })
-    }
-
-    private fun showErrorDialog(context: Context) {
-        MaterialAlertDialogBuilder(context)
-            .setTitle("Error retrieving data")
-            .setPositiveButton("OK") { dialog, which -> }
-            .show()
     }
 
     private fun initializeRecyclerView(characters: List<CharacterRow>) {

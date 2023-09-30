@@ -13,6 +13,9 @@ class DetailViewModel(private val repository: RickAndMortyRepositoryImpl): ViewM
     private val _detail: MutableLiveData<ResultResponse> = MutableLiveData()
     val detail: LiveData<ResultResponse> get() = _detail
 
+    private val _errorLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val errorLoading: LiveData<Boolean> get() = _errorLoading
+
     fun getCharacterById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getCharacterById(id).collect {
@@ -20,7 +23,7 @@ class DetailViewModel(private val repository: RickAndMortyRepositoryImpl): ViewM
                     val character = it.getOrNull()
                     this@DetailViewModel._detail.postValue(character)
                 } else {
-
+                    _errorLoading.postValue(true)
                 }
             }
 
