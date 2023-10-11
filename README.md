@@ -1,3 +1,8 @@
+<p align="center">
+<img src="https://github.com/rodrigonovoas/rick-and-morty-characters-android/assets/49367885/ec0dc72b-986f-4ead-b208-e876a1785348" width="250">
+<img src="https://github.com/rodrigonovoas/rick-and-morty-characters-android/assets/49367885/b33403e8-2d03-4d88-b090-e47b079198d7" width="250">
+</p>
+
 # rick-and-morty-characters-android
 Android app made with Kotlin and XML to show Rick and Morty characters retrieved from https://rickandmortyapi.com
 
