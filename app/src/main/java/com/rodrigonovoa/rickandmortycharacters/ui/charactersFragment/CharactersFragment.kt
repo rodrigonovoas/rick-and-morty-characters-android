@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rodrigonovoa.rickandmortycharacters.R
 import com.rodrigonovoa.rickandmortycharacters.data.model.CharacterRow
 import com.rodrigonovoa.rickandmortycharacters.databinding.FragmentCharactersBinding
+import com.rodrigonovoa.rickandmortycharacters.ui.MainActivity
 import com.rodrigonovoa.rickandmortycharacters.ui.adapters.CharactersRecyclerviewAdapter
 import com.rodrigonovoa.rickandmortycharacters.utils.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,6 +40,11 @@ class CharactersFragment : Fragment(), CharactersRecyclerviewAdapter.ItemClickLi
         super.onViewCreated(view, savedInstanceState)
         observers()
         viewListeners()
+        changeToolbarName()
+    }
+
+    private fun changeToolbarName() {
+        (activity as? MainActivity)?.changeToolbarName("Characters")
     }
 
     private fun viewListeners() {

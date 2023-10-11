@@ -1,6 +1,7 @@
 package com.rodrigonovoa.rickandmortycharacters.ui
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.rodrigonovoa.rickandmortycharacters.R
@@ -22,6 +23,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    fun changeToolbarName(name: String) {
+        val title: TextView = findViewById(R.id.tv_title)
+        title.text = name
     }
 
 }

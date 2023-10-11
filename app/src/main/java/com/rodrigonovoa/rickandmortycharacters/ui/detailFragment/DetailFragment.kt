@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.rodrigonovoa.rickandmortycharacters.databinding.FragmentDetailBinding
+import com.rodrigonovoa.rickandmortycharacters.ui.MainActivity
 import com.rodrigonovoa.rickandmortycharacters.utils.DialogUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,6 +31,11 @@ class DetailFragment : Fragment() {
         getCharacterDetailFromId()
         viewListeners()
         observers()
+        changeToolbarName()
+    }
+
+    private fun changeToolbarName() {
+        (activity as? MainActivity)?.changeToolbarName("Detail")
     }
 
     private fun getCharacterDetailFromId() {
