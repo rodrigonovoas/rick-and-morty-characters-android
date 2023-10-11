@@ -12,6 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">@font/faustina</item>
+        <item name="android:fontFamily">@font/punkboy_tbs_bold</item>
     </style>
 </resources>
